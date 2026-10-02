@@ -1,6 +1,6 @@
 # AgentCare
 
-AgentCare 的初版基礎包含 React 登入與 Dashboard、.NET API、EasyWealthSSO 登入整合，以及只管理 AgentCare 資料庫的 FluentMigrator 遷移。需求與驗收條件見 `openspec/changes/add-agentcare-foundation/`。
+AgentCare 的初版基礎包含 React 登入與 Dashboard、.NET API、EasyWealthSSO 登入整合，以及只管理 AgentCare 資料庫的 FluentMigrator 遷移。現行需求見 `openspec/specs/`；初版設計與驗證紀錄見 `openspec/changes/archive/2026-10-02-add-agentcare-foundation/`。
 
 ## 本機設定
 

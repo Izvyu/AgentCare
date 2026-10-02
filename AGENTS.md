@@ -20,7 +20,7 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 # AgentCare 專案指引
 
 - 不要批量刪除；批量刪除前先詢問使用者。
-- 以下目錄是 `add-agentcare-foundation` 的實作位置；以實際檔案及該 change 的規格為準。
+- 以下目錄是 AgentCare 基礎專案的實作位置；以實際檔案及 `openspec/specs/` 的現行規格為準。
 
 | 路徑 | 職責 |
 | --- | --- |
@@ -31,9 +31,10 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 | `Dotnet/AgentCare.Migrations/` | 只管理 AgentCare 資料庫的 FluentMigrator migration |
 | `Dotnet/AgentCare.DbMigrator/` | 明確執行資料庫狀態、驗證與遷移的 CLI |
 | `.github/workflows/` | 測試與建置 CI |
-| `openspec/changes/add-agentcare-foundation/` | 本次基礎專案與 SSO 登入的提案、設計、任務與規格 |
+| `openspec/specs/` | 基礎專案、SSO 登入與 Dashboard 的現行規格 |
+| `openspec/changes/archive/2026-10-02-add-agentcare-foundation/` | 初版提案、設計、任務與驗證紀錄 |
 
 - 本機安裝、啟停、測試及明確執行資料庫預檢／遷移的方式見 `README.md`；敏感設定只放忽略的 Development 設定或環境變數。
-- 實作基礎專案、SSO 登入或 Dashboard 時，先讀 `openspec/changes/add-agentcare-foundation/proposal.md`、`design.md`、`tasks.md` 及受影響的 `specs/`；以任務勾選狀態及實際程式確認完成範圍。
+- 修改基礎專案、SSO 登入或 Dashboard 時，先讀 `openspec/specs/project-foundation/spec.md`、`application-auth/spec.md`、`dashboard-shell/spec.md`；需要初版設計取捨與驗證紀錄時，再讀 `openspec/changes/archive/2026-10-02-add-agentcare-foundation/`。
 - 涉及使用者、角色、公司或 SSO 資料邊界時，讀 `CONTEXT.md` 與 `docs/adr/0001-sso-data-boundary.md`。
 - 變更需求或架構時，依 `openspec/AGENTS.md` 維護對應的 OpenSpec change。
