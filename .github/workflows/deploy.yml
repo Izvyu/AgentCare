@@ -1,0 +1,118 @@
+name: Deploy AgentCare to IIS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: [self-hosted, agentcare]
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install frontend dependencies
+        working-directory: Reactjs
+        run: npm ci --legacy-peer-deps
+
+      - name: Build React app
+        working-directory: Reactjs
+        run: npm run build
+        env:
+          CI: false
+
+      - name: Configure .NET paths
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Path "$env:GITHUB_WORKSPACE\.dotnet" -Force | Out-Null
+          New-Item -ItemType Directory -Path "$env:GITHUB_WORKSPACE\.nuget\packages" -Force | Out-Null
+          "DOTNET_INSTALL_DIR=$env:GITHUB_WORKSPACE\.dotnet" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "DOTNET_MULTILEVEL_LOOKUP=0" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "NUGET_PACKAGES=$env:GITHUB_WORKSPACE\.nuget\packages" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Publish .NET API
+        run: dotnet publish Dotnet/AgentCare.Api/AgentCare.Api.csproj -c Release -o Dotnet/publish
+
+      - name: Stop IIS App Pool
+        shell: powershell
+        run: |
+          Import-Module WebAdministration
+          $poolName = "AgentCare"
+          if ((Get-WebAppPoolState -Name $poolName).Value -ne "Stopped") {
+            Stop-WebAppPool -Name $poolName
+          }
+
+      - name: Deploy React build to IIS
+        shell: powershell
+        run: |
+          $destination = "D:\wwwroot\AgentCare_UI"
+          $source = "Reactjs\dist"
+
+          if (-not (Test-Path $destination)) {
+            New-Item -ItemType Directory -Path $destination -Force | Out-Null
+          }
+
+          Get-ChildItem -Path $destination -Force -Exclude "web.config" |
+            Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+
+          Copy-Item -Path "$source\*" -Destination $destination -Recurse -Force
+
+      - name: Deploy API publish to IIS
+        shell: powershell
+        run: |
+          $destination = "D:\wwwroot\AgentCare_API"
+          $source = "Dotnet\publish"
+          $preserveNames = @("web.config", "logs", "wwwroot")
+
+          if (-not (Test-Path $destination)) {
+            New-Item -ItemType Directory -Path $destination -Force | Out-Null
+          }
+
+          Get-ChildItem -Path $destination -Force |
+            Where-Object { $preserveNames -notcontains $_.Name } |
+            Remove-Item -Recurse -Force -ErrorAction Stop
+
+          $runtimeWwwroot = Join-Path $destination "wwwroot"
+          $runtimeImages = Join-Path $runtimeWwwroot "Images"
+
+          if (-not (Test-Path $runtimeWwwroot)) {
+            New-Item -ItemType Directory -Path $runtimeWwwroot -Force | Out-Null
+          }
+
+          if (-not (Test-Path $runtimeImages)) {
+            New-Item -ItemType Directory -Path $runtimeImages -Force | Out-Null
+          }
+
+          Get-ChildItem -Path $runtimeWwwroot -Force |
+            Where-Object { $_.Name -ne "Images" } |
+            Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+
+          Copy-Item -Path "$source\*" -Destination $destination -Recurse -Force
+
+      - name: Start IIS App Pool
+        shell: powershell
+        run: |
+          Start-WebAppPool -Name "AgentCare"
+
+      - name: Verify deployment
+        shell: powershell
+        run: |
+          if (-not (Test-Path "D:\wwwroot\AgentCare_UI\index.html")) {
+            throw "Frontend deployment failed: index.html not found."
+          }
+
+          if (-not (Test-Path "D:\wwwroot\AgentCare_API\AgentCare.Api.dll")) {
+            throw "API deployment failed: AgentCare.Api.dll not found."
+          }
