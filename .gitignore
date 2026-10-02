@@ -1,0 +1,58 @@
+# Node.js / npm
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+.nyc_output/
+coverage/
+
+# React / Vite
+Reactjs/dist/
+Reactjs/.vite/
+Reactjs/dist-ssr/
+Reactjs/*.local
+Reactjs/.env*
+!Reactjs/.env.example
+
+# .NET
+**/bin/
+**/obj/
+Dotnet/publish/
+Dotnet/logs/
+Dotnet/uploads/
+Dotnet/*.user
+Dotnet/*.suo
+Dotnet/.vs/
+Dotnet/.vscode/
+**/appsettings.Development.json
+**/appsettings.Production.json
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.local.json
+*.pem
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+Thumbs.db
+desktop.ini
+
+# Logs and caches
+*.log
+.cache/
+
+# Temporary test output
+.superpowers/tests/
+
+# AgentCare local process ownership
+.runtime/

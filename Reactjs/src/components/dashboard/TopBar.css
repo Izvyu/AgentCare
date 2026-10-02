@@ -1,0 +1,21 @@
+.topbar { position: sticky; top: 0; z-index: 1000; height: 70px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.topbar-toolbar { min-height: 70px !important; gap: 6px; padding: 0 24px !important; }
+.topbar-home-icon { vertical-align: middle; }
+.topbar-tabs { display: flex; flex: 0 1 auto; min-width: 0; max-width: 58%; overflow-x: auto; scrollbar-width: thin; gap: 4px; }
+.topbar-tab { display: flex; align-items: center; flex: 0 0 auto; min-height: 36px; max-width: 190px; padding: 0 5px 0 13px; gap: 4px; border: 1px solid transparent; border-radius: 8px; color: var(--text-secondary); cursor: pointer; }
+.topbar-tab:hover { background: var(--surface-muted); }
+.topbar-tab.active { color: var(--brand-color); background: var(--brand-soft); border-color: var(--brand-border); }
+.topbar-tab-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px !important; }
+.topbar-tab-close { color: inherit !important; padding: 2px !important; }
+.topbar-spacer { flex: 1; }
+.topbar-user { display: flex; align-items: center; gap: 10px; padding: 4px 8px 4px 12px; border: 0; border-left: 1px solid var(--border); background: transparent; color: var(--text-primary); cursor: pointer; }
+.user-avatar { width: 34px !important; height: 34px !important; background: var(--brand-color) !important; color: #fff !important; font-size: 14px !important; }
+.topbar-user-name { max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px !important; font-weight: 600 !important; }
+.menu-item-text { margin-left: 9px; flex: 1; }
+.menu-locale-select { border: 1px solid var(--border); border-radius: 5px; padding: 4px; color: inherit; background: var(--surface); }
+.notification-placeholder { min-width: 240px; padding: 18px; display: flex; flex-direction: column; gap: 7px; }
+
+@media (max-width: 767px) {
+  .topbar-tabs { max-width: 65%; }
+  .topbar-user-name { display: none; }
+}

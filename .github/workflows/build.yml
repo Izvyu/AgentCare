@@ -1,0 +1,29 @@
+name: Build and test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  foundation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: Reactjs/package-lock.json
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - run: npm ci
+      - run: npm ci --prefix Reactjs
+      - run: npm run test:react
+      - run: npm run build:react
+      - run: dotnet test Dotnet/AgentCare.Api.Tests/AgentCare.Api.Tests.csproj --configuration Release
+      - run: dotnet build Dotnet/AgentCare.Api/AgentCare.Api.csproj --configuration Release
+      - run: dotnet build Dotnet/AgentCare.Migrations/AgentCare.Migrations.csproj --configuration Release
+      - run: dotnet build Dotnet/AgentCare.DbMigrator/AgentCare.DbMigrator.csproj --configuration Release

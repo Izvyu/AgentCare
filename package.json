@@ -1,0 +1,23 @@
+{
+  "name": "agentcare",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AgentCare full-stack foundation",
+  "scripts": {
+    "install:all": "npm install && npm --prefix Reactjs install",
+    "start": "node scripts/start-dev.cjs",
+    "start:react": "npm --prefix Reactjs run dev",
+    "start:dotnet": "node scripts/start-dotnet.cjs",
+    "stop": "node scripts/stop.cjs",
+    "db:status": "node scripts/db.cjs status",
+    "db:validate": "node scripts/db.cjs validate",
+    "db:migrate": "node scripts/db.cjs migrate",
+    "build:react": "npm --prefix Reactjs run build",
+    "build:dotnet": "dotnet build Dotnet/AgentCare.Api/AgentCare.Api.csproj --configuration Release",
+    "build:migrations": "dotnet build Dotnet/AgentCare.Migrations/AgentCare.Migrations.csproj --configuration Release && dotnet build Dotnet/AgentCare.DbMigrator/AgentCare.DbMigrator.csproj --configuration Release",
+    "build": "npm run build:react && npm run build:dotnet && npm run build:migrations",
+    "test:react": "npm --prefix Reactjs run test -- --run",
+    "test:dotnet": "dotnet test Dotnet/AgentCare.Api.Tests/AgentCare.Api.Tests.csproj --configuration Release",
+    "test": "npm run test:react && npm run test:dotnet"
+  }
+}
