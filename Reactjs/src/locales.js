@@ -1,7 +1,7 @@
 export const messages = {
   'zh-tw': {
-    appName: 'AgentCare 出租管理系統',
-    brandSubtitle: '出租管理系統',
+    appName: 'AgentCare 悅容新系統',
+    brandSubtitle: '悅容新系統',
     loginTitle: '登入 AgentCare',
     loginSubtitle: '請使用您的帳號登入系統',
     account: '帳號',
